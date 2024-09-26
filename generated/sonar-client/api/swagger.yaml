@@ -1,0 +1,121 @@
+openapi: 3.0.0
+info:
+  title: Sonar Coverage API
+  description: ""
+  version: 1.0.0
+servers:
+- url: /
+security:
+- basicAuth: []
+paths:
+  /measures/component:
+    get:
+      tags:
+      - Coverage
+      summary: returns component metrics
+      description: ""
+      parameters:
+      - name: component
+        in: query
+        description: component id
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: branch
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: main
+      - name: metricKeys
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: "ncloc,complexity,violations,coverage,lines_to_cover"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMetrics'
+        "500":
+          description: Error response
+components:
+  schemas:
+    ProjectMetrics:
+      type: object
+      properties:
+        component:
+          $ref: '#/components/schemas/ProjectMetrics_component'
+      example:
+        component:
+          measures:
+          - metric: metric
+            bestValue: true
+            value: value
+          - metric: metric
+            bestValue: true
+            value: value
+          qualifier: TRK
+          name: mnp-payments
+          description: Parent pom providing dependency and plugin management for applications
+            built with Maven
+          key: ru.beeline.crm-mnp.mnp-payments
+    Metrics:
+      type: object
+      properties:
+        metric:
+          type: string
+        value:
+          type: string
+        bestValue:
+          type: boolean
+      example:
+        metric: metric
+        bestValue: true
+        value: value
+    ProjectMetrics_component:
+      type: object
+      properties:
+        key:
+          type: string
+          example: ru.beeline.crm-mnp.mnp-payments
+        name:
+          type: string
+          example: mnp-payments
+        description:
+          type: string
+          example: Parent pom providing dependency and plugin management for applications
+            built with Maven
+        qualifier:
+          type: string
+          example: TRK
+        measures:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metrics'
+      example:
+        measures:
+        - metric: metric
+          bestValue: true
+          value: value
+        - metric: metric
+          bestValue: true
+          value: value
+        qualifier: TRK
+        name: mnp-payments
+        description: Parent pom providing dependency and plugin management for applications
+          built with Maven
+        key: ru.beeline.crm-mnp.mnp-payments
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic

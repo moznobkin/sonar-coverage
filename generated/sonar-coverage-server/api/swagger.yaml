@@ -1,0 +1,96 @@
+openapi: 3.1.0
+info:
+  title: Sonar coverage dashboard
+  description: ""
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /coverage:
+    get:
+      tags:
+      - Coverage
+      summary: returns the coverage for all products
+      description: ""
+      operationId: getDefaultCoverage
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coverage'
+        "500":
+          description: Error response
+    post:
+      tags:
+      - Coverage
+      summary: returns the coverage for all requested products
+      description: ""
+      operationId: getCoverage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductsCoverageRequest'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coverage'
+        "500":
+          description: Error response
+components:
+  schemas:
+    Coverage:
+      properties:
+        date:
+          format: date-time
+        products:
+          items:
+            $ref: '#/components/schemas/ProductCoverage'
+        status:
+          description: Coverage status
+          enum:
+          - complete
+          - witherrors
+          - error
+        errors:
+          items: {}
+      example:
+        date: ""
+        errors: ""
+        products: ""
+        status: ""
+    ProductCoverage:
+      properties:
+        product: {}
+        linesToCoverTotal: {}
+        unitTestsTotal: {}
+        coverageTotal: {}
+        repos:
+          items:
+            $ref: '#/components/schemas/RepoCoverage'
+    RepoCoverage:
+      properties:
+        id: {}
+        branch: {}
+        linesToCover: {}
+        unitTests: {}
+        coverage: {}
+    ProductsCoverageRequest:
+      items:
+        $ref: '#/components/schemas/Product'
+    Product:
+      properties:
+        name:
+          example: CRMMNP
+        repos:
+          items:
+            properties:
+              id:
+                example: ru.beeline.pbe-gosqr.gosqr-api
+              branch:
+                example: feature/FPRD-3288-add-dev-config

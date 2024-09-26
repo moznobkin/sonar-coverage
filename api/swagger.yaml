@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: Sonar coverage dashboard
+  description: ""
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /coverage:
+    get:
+      tags:
+      - Coverage
+      summary: returns the coverage for all products
+      description: ""
+      operationId: pricingOrderPost
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Coverage'
+        "500":
+          description: Error response
+components:
+  schemas:
+    Coverage:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductCoverage'
+        status:
+          type: string
+          description: Coverage status
+          enum:
+          - complete
+          - witherrors
+          - error
+        errors:
+          type: array
+          items:
+            type: string
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        errors:
+        - errors
+        - errors
+        products:
+        - linesToCoverTotal: 0
+          repos:
+          - coverage: 2.3021358869347654518833223846741020679473876953125
+            linesToCover: 5
+            unitTests: 5
+          - coverage: 2.3021358869347654518833223846741020679473876953125
+            linesToCover: 5
+            unitTests: 5
+          unitTestsTotal: 6
+          coverageTotal: 1.46581298050294517310021547018550336360931396484375
+        - linesToCoverTotal: 0
+          repos:
+          - coverage: 2.3021358869347654518833223846741020679473876953125
+            linesToCover: 5
+            unitTests: 5
+          - coverage: 2.3021358869347654518833223846741020679473876953125
+            linesToCover: 5
+            unitTests: 5
+          unitTestsTotal: 6
+          coverageTotal: 1.46581298050294517310021547018550336360931396484375
+        status: complete
+    ProductCoverage:
+      type: object
+      properties:
+        linesToCoverTotal:
+          type: integer
+        unitTestsTotal:
+          type: integer
+        coverageTotal:
+          type: number
+        repos:
+          type: array
+          items:
+            $ref: '#/components/schemas/RepoCoverage'
+      example:
+        linesToCoverTotal: 0
+        repos:
+        - coverage: 2.3021358869347654518833223846741020679473876953125
+          linesToCover: 5
+          unitTests: 5
+        - coverage: 2.3021358869347654518833223846741020679473876953125
+          linesToCover: 5
+          unitTests: 5
+        unitTestsTotal: 6
+        coverageTotal: 1.46581298050294517310021547018550336360931396484375
+    RepoCoverage:
+      type: object
+      properties:
+        linesToCover:
+          type: integer
+        unitTests:
+          type: integer
+        coverage:
+          type: number
+      example:
+        coverage: 2.3021358869347654518833223846741020679473876953125
+        linesToCover: 5
+        unitTests: 5

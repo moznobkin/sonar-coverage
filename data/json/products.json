@@ -1,0 +1,22 @@
+
+[
+    {
+        "name": "CRMMNP",
+        "repos": [
+            {"id": "ru.beeline.crm-mnp.mnp-payments", "branch": "main"},
+            {"id": "ru.beeline.crm-mnp.mnp-integration-web", "branch": "main"}
+        ]
+    },
+    { 
+        "name":  "Legal",
+        "repos": [
+            {"id" : "ru.beeline.pbe-gosqr.gosqr-api", "branch":"feature/PRD-3288-add-dev-config"},
+            {
+                "id" : "ru.beeline.pbe-gosqr.gosqr-common",
+                "branch":"fix_for_callback"
+            },
+            {"id" : "ru.beeline.pbe-gosqr.gosqr-esia-notification", "branch":"feature/e2e-config"},
+            {"id" : "ru.beeline.pbe-gosqr.gosqr-file-processing", "branch":"feature/PRD-3815-3817-3818-3819"}
+        ]
+    }
+]
