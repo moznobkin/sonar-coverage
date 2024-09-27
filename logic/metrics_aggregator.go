@@ -52,11 +52,25 @@ func AggregateMetrics(ctx context.Context, req []server.Product) (*server.Covera
 }
 
 func requestRepoMetrics(ctx context.Context, repoId, branch string) (*client.ProjectMetrics, error) {
-	proxyUrl, err := url.Parse("http://192.168.191.10:8888")
+
+	config, err := GetConfig()
+	if err != nil {
+		return nil, err
+	}
+	transport := &http.Transport{}
+
+	if config.Proxy != "" {
+		proxyUrl, err := url.Parse(config.Proxy)
+		if err == nil {
+			transport.Proxy = http.ProxyURL(proxyUrl)
+		}
+	}
+
 	httpClient := &http.Client{
 		Timeout:   15 * time.Second,
-		Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)},
+		Transport: transport,
 	}
+
 	cfg := &client.Configuration{
 		BasePath:   "https://sonar.vimpelcom.ru/api",
 		HTTPClient: httpClient,
@@ -64,7 +78,7 @@ func requestRepoMetrics(ctx context.Context, repoId, branch string) (*client.Pro
 	c := client.NewAPIClient(cfg)
 
 	authCtx := context.WithValue(context.Background(), client.ContextBasicAuth, client.BasicAuth{
-		UserName: "squ_2e4c4496649dbbd3f55d05d7d8ae9aa24c0ba994",
+		UserName: config.SonarToken,
 	})
 	out, _, err := c.CoverageApi.MeasuresComponentGet(authCtx, repoId, &client.CoverageApiMeasuresComponentGetOpts{Branch: optional.NewString(branch), MetricKeys: optional.NewString("ncloc,complexity,violations, coverage, lines_to_cover, lines, tests")})
 

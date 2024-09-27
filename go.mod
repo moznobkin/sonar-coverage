@@ -1,6 +1,6 @@
 module github.com/moznobkin/sonar-coverage
 
-go 1.21.5
+go 1.21
 
 require (
 	github.com/antihax/optional v1.0.0
